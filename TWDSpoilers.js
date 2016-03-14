@@ -74,7 +74,9 @@ function getLog(id, validate, vcb){
 				return;
 			}
 			for(i=0;i<r.data.barrels.length;i++){
-				getImageData(r.data.barrels[i])
+				if(r.data.barrels[i].hash){
+					getImageData(r.data.barrels[i])
+				}
 			}
 		}else{
 			if(validate){
@@ -151,3 +153,5 @@ else if(args[2] == 'bruteForce'){
 else{
 	console.error("Usage: getImages [Schedule ID], findShow [Start ID] [End ID], bruteForce [Year (4-digit)] [Month (2-digit)] [Season #] [Episode #] [Code Length]");
 }
+
+
