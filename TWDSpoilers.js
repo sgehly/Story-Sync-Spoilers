@@ -89,43 +89,6 @@ function getLog(id, validate, vcb){
 	})
 }
 
-function bruteImage(url, cb){
-	console.log(url)
-	var opts = {uri: url}
-	return new Promise(function(res,rej){
-		rp(opts).then(function(r){
-			cb(r)
-		})
-		.catch(function(r){
-			cb(r)
-		})
-	})
-}
-
-
-function string_recurse(array, numArray, length, rurl, cb){
-	var code = '';
-	var num = numArray[Math.floor(Math.random()*numArray.length)];
-    for(i=0;i<length;i++){
-    	code += array[Math.floor(Math.random()*array.length)];
-    }
-    bruteImage(rurl+num+'-img-'+code+'.jpg', function(r){
-    	cb(r);
-    });
-}
-
-function brute(rootUrl, length){
-	var letterArray = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9'];
-	var numArray = ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
-	string_recurse(letterArray, numArray, length, rootUrl, function(r){
-		if(r.response.statusCode !== 403){
-			console.log(r.response);
-		}
-		brute(rootUrl, length)
-	});
-}
-
-
 var args = process.argv;
 
 if(!termsAcceptance){
@@ -146,9 +109,6 @@ else if(args[2] == 'findShow'){
 			console.log(r);
 		});
 	}
-}
-else if(args[2] == 'bruteForce'){
-	brute('http://images.sync.amctv.com/wp-content/uploads/'+args[3]+'/'+args[4]+'/TWD-S'+args[5]+'-SS-'+args[5]+''+args[6]+'-', parseInt(args[7]));
 }
 else{
 	console.error("Usage: getImages [Schedule ID], findShow [Start ID] [End ID], bruteForce [Year (4-digit)] [Month (2-digit)] [Season #] [Episode #] [Code Length]");
