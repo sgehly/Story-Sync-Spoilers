@@ -1,0 +1,15 @@
+{
+  "name": "twdspoilers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "twdspoilers.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.3.3",
+    "console-png": "^1.1.0"
+  }
+}

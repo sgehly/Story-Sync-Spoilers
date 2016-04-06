@@ -52,13 +52,21 @@ function sendRequest(endpoint, data, passback){
 	})
 }
 
+
+var context = [];
+
 function getImageData(barrel){
 	sendRequest('ajax.get.barrel', {barrel_id: barrel.id, hash: barrel.hash})
 	.then(function(r){
 		barrel.image = r.data.barrel_background_image;
 		barrel.caption = r.data.name;
 		for (first in barrel.image) break;
-		console.log({caption: barrel.caption, image: barrel.image[first]})
+			var content = barrel.image[first];
+
+			if(context.indexOf(content) == -1){
+				console.log(content);
+				context.push(content);
+			}
 	})
 }
 
@@ -73,6 +81,7 @@ function getLog(id, validate, vcb){
 				console.error("No barrels found.");
 				return;
 			}
+			console.log("[][][][][] POLLING [][][][][]")
 			for(i=0;i<r.data.barrels.length;i++){
 				if(r.data.barrels[i].hash){
 					getImageData(r.data.barrels[i])
@@ -89,6 +98,33 @@ function getLog(id, validate, vcb){
 	})
 }
 
+function bruteImage(url, cb){
+	console.log(url)
+	var opts = {uri: url}
+	return new Promise(function(res,rej){
+		rp(opts).then(function(r){
+			cb(r)
+		})
+		.catch(function(r){
+			cb(r)
+		})
+	})
+}
+
+
+function string_recurse(array, numArray, length, rurl, cb){
+	var code = '';
+	var num = numArray[Math.floor(Math.random()*numArray.length)];
+    for(i=0;i<length;i++){
+    	code += array[Math.floor(Math.random()*array.length)];
+    }
+    bruteImage(rurl+num+'-img-'+code+'.jpg', function(r){
+    	cb(r);
+    });
+}
+
+
+
 var args = process.argv;
 
 if(!termsAcceptance){
@@ -101,7 +137,9 @@ if(!key || !secret){
 }
 
 if(args[2] == 'getImages'){
-	getLog(args[3])
+	setInterval(function(){
+		getLog(args[3])
+	},1000)
 }
 else if(args[2] == 'findShow'){
 	for(i=args[3];i<args[4];i++){
@@ -111,7 +149,7 @@ else if(args[2] == 'findShow'){
 	}
 }
 else{
-	console.error("Usage: getImages [Schedule ID], findShow [Start ID] [End ID], bruteForce [Year (4-digit)] [Month (2-digit)] [Season #] [Episode #] [Code Length]");
+	console.error("Usage: getImages [Schedule ID], findShow [Start ID] [End ID]");
 }
 
 
